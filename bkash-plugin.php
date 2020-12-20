@@ -17,23 +17,16 @@ function bkashp_load_textdomain()
 }
 add_action('plugins_loaded', 'bkashp_load_textdomain');
 
-
-
-add_action('admin_menu', 'bp_admin_menu');
-
 function bp_admin_menu()
 {
-    //parameters details
-    //add_management_page( $page_title, $menu_title, $capability,$menu_slug, $function );
-    //add a new setting page udner setting menu
-    //add_management_page('Footer Text', 'Footer Text', 'manage_options',__FILE__, //'footer_text_admin_page');
-
     add_menu_page(
         __('Bkash Plugin title', 'bkash-plugin'),
         __('Bkash Plugin', 'bkash-plugin'),
         'manage_options',
         'bkash_plugin_page',
-        'bp_admin_page_function'
+        'bp_settings_function',
+        plugins_url('assets/images/bkash-logo.png', __FILE__)
+
     );
     add_submenu_page(
         'bkash_plugin_page',
@@ -43,39 +36,43 @@ function bp_admin_menu()
         'bp-all-entries',
         'bp_all_entries_function'
     );
-    add_submenu_page(
-        'bkash_plugin_page',
-        __('Bkash Plugin submenu', 'bkash-plugin'),
-        __('Bkash Plugin Settings', 'bkash-plugin'),
-        'manage_options',
-        'bp_setting_page',
-        'bp_settings_function'
-    );
 }
-
-function bp_admin_page_function()
-{
-    echo 'this is where we will edit the variable';
-}
+add_action('admin_menu', 'bp_admin_menu');
 
 function bp_all_entries_function()
 {
-    include_once('bkash_all_entries_page.php');
+    include_once('bp_all_entries_page.php');
 }
-
 function bp_settings_function()
 {
+    // if ( !class_exists( 'woocommerce' ) ) { 
+    //     echo("<h1>Your Woocommerece Plugin doesn't active</h1>");
+    //     return; 
+    // }
     include_once('bkash_settings_page.php');
 }
+function bp_save_form(){
+    check_admin_referer("bkash-plugin");
 
+    $username = isset($_POST['bkashusername']);
+    $password = isset($_POST['bkashpassword']);
+    $appkey = isset($_POST['bkashappkey']);
+    $appsecret = isset($_POST['bkashappsecret']);
 
+    if($username && $password && $appkey && $appsecret){
+        update_option('bkashusername', sanitize_text_field($_POST['bkashusername']));
+        update_option('bkashpassword', sanitize_text_field($_POST['bkashpassword']));
+        update_option('bkashappkey', sanitize_text_field($_POST['bkashappkey']));
+        update_option('bkashappsecret', sanitize_text_field($_POST['bkashappsecret']));
+        update_option('bkashmode', sanitize_text_field($_POST['bkashmode']));
+    }
+    wp_redirect('admin.php?page=bkash_plugin_page');
+}
+add_action('admin_post_bp_admin_page', 'bp_save_form');
 
-
-// displaying content
-// function your_function()
-// {
-//     echo "<div style='color: red;
-//     font-size: 30px;
-//     margin: 20px;'>" . get_option('footer_text') . "</div>";
-// }
-// add_action('wp_footer', 'your_function');
+function bkash_plugin_settings_link($links){
+    $newlink = sprintf("<a href='%s'>%s</a>",'admin.php?page=bkash_plugin_page',__('Settings','bkash-plugin'));
+    $links[] = $newlink;
+    return $links;
+}
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'bkash_plugin_settings_link');

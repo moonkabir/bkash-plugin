@@ -1,81 +1,47 @@
-<?php
+<?php _e('<h1>Bkash Settings Data</h1>','bkash-plugin')?>
 
-global $chk2;
-global $chk3;
-global $chk4;
-global $chk5;
+<form method="post" action="<?php echo admin_url('admin-post.php') ?>">
+    <?php
+    wp_nonce_field("bkash-plugin");
+    ?>
+    <table class=form-table>
+        <tr>
+            <th><label for="bkashmode"><?php _e('Enable Test Mood', 'bkash-plugin'); ?></label></th>
+            <td>
+                <input type="checkbox" id ="bkashmode" name="bkashmode" value="checked" <?php echo((get_option('bkashmode')) ? "checked" : "");?>/>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bkashusername"><?php _e('Username', 'bkash-plugin'); ?></label></th>
+            <td>
+                <input type="text" id ="bkashusername"name="bkashusername" value="<?php echo esc_attr(get_option('bkashusername')); ?> " size="50" />
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bkashpassword"><?php _e('Password', 'bkash-plugin'); ?></label></th>
+            <td>
+                <input type="password" id ="bkashpassword"name="bkashpassword" value="<?php echo esc_attr(get_option('bkashpassword')); ?> " size="50" />
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bkashappkey"><?php _e('APP Key', 'bkash-plugin'); ?></label></th>
+            <td>
+                <input type="text" id ="bkashappkey"name="bkashappkey" value="<?php echo esc_attr(get_option('bkashappkey')); ?> " size="50" />
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bkashappsecret"><?php _e('APP Secret', 'bkash-plugin'); ?></label></th>
+            <td>
+                <input type="text" id ="bkashappsecret"name="bkashappsecret" value="<?php echo esc_attr(get_option('bkashappsecret')); ?> " size="50" />
+            </td>
+        </tr>
 
-if (isset($_POST['bp_submit'])) {
-    bp_opt();
-}
-function bp_opt()
-{
-    $bkashusername = $_POST['bkashusername'];
-    $bkashpassword = $_POST['bkashpassword'];
-    $bkashappkey = $_POST['bkashappkey'];
-    $bkashappsecret = $_POST['bkashappsecret'];
-
-    global $chk2;
-    global $chk3;
-    global $chk4;
-    global $chk5;
-
-    if (get_option('bkash_user_name') != trim($bkashusername)) {
-        $chk2 = update_option('bkash_user_name', trim($bkashusername));
-    }
-    if (get_option('bkash_password') != trim($bkashpassword)) {
-        $chk3 = update_option('bkash_password', trim($bkashpassword));
-    }
-    if (get_option('bkash_app_key') != trim($bkashappkey)) {
-        $chk4 = update_option('bkash_app_key', trim($bkashappkey));
-    }
-    if (get_option('bkash_app_secret') != trim($bkashappsecret)) {
-        $chk5 = update_option('bkash_app_secret', trim($bkashappsecret));
-    }
-}
-?>
-<div class="wrap">
-    <div id="icon-options-general" class="icon32"> <br>
-    </div>
-    <h2>Bkash Settings</h2>
-    <?php if (isset($_POST['bp_submit']) && ($chk2 && $chk3 && $chk4 && $chk5)) : ?>
-        <div id="message" class="updated below-h2">
-            <p>Content updated successfully</p>
-        </div>
-    <?php endif; ?>
-
-
-    <div class="metabox-holder">
-        <h3><strong>Enter bkash Credential and click on save button.</strong></h3>
-        <form method="post" action="">
-            <table class="form-table">
-                <tr>
-                    <th scope="row">Test mode</th>
-                    <td><input type="checkbox" name="bkashmode" <?php echo (isset($_POST['bkashmode']) ? 'checked' : ''); ?> /> Enable Test Mode</td>
-                </tr>
-                <tr>
-                    <th scope="row">User Name</th>
-                    <td><input type="text" name="bkashusername" value="<?php echo get_option('bkash_user_name'); ?> " size="50" /></td>
-                </tr>
-                <tr>
-                    <th scope="row">Password</th>
-                    <td><input type="password" name="bkashpassword" value="<?php echo get_option('bkash_password'); ?> " size="50" /></td>
-                </tr>
-                <tr>
-                    <th scope="row">App Key</th>
-                    <td><input type="text" name="bkashappkey" value="<?php echo get_option('bkash_app_key'); ?> " size="50" /></td>
-                </tr>
-                <tr>
-                    <th scope="row">App Secret</th>
-                    <td><input type="text" name="bkashappsecret" value="<?php echo get_option('bkash_app_secret'); ?> " size="50" /></td>
-                </tr>
-                <tr>
-                    <th scope="row">&nbsp;</th>
-                    <td style="padding-top:10px;  padding-bottom:10px;">
-                        <input type="submit" name="bp_submit" value="Save changes" class="button-primary" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-</div>
+        <tr>
+            <th scope="row">&nbsp;</th>
+            <td style="padding-top:10px;  padding-bottom:10px;">
+                <input type="submit" name="bp_submit" value="Save changes" class="button-primary" />
+            </td>
+        </tr>
+        <input type="hidden" name="action" value="bp_admin_page">
+    </table>
+</form> 
