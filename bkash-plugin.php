@@ -53,7 +53,7 @@ function bp_settings_function()
 }
 function bp_save_form(){
     check_admin_referer("bkash-plugin");
-
+    
     $username = isset($_POST['bkashusername']);
     $password = isset($_POST['bkashpassword']);
     $appkey = isset($_POST['bkashappkey']);
